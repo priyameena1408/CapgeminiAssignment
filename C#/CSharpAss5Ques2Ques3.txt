@@ -1,0 +1,76 @@
+using System;
+using System.Collections.Generic;
+
+namespace LitwareLib
+{
+    class Employee 
+    {
+        //declaring variables as private
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double EmpSalary { get; set; }
+
+        //Constructor with no argument
+        public Employee()
+        {
+            this.EmpNo = -1;
+            this.EmpName = "No name provided";
+            this.EmpSalary = -1;
+        }
+
+        //Parameterized constructor
+        public Employee(int empNo, string empName, double salary)
+        {
+            this.EmpNo = empNo;
+            this.EmpName = empName;
+            this.EmpSalary = salary;
+        }
+    }
+
+    
+
+    internal class Program
+    {
+        public static void Main()
+        {
+            List<Employee> EmployeeList = new List<Employee>();
+            EmployeeList.Add(new Employee { EmpNo = 1, EmpName = "Riya", EmpSalary = 3000});
+            EmployeeList.Add(new Employee { EmpNo = 2, EmpName = "Sonam", EmpSalary = 2000 });
+            EmployeeList.Add(new Employee { EmpNo = 3, EmpName = "Trisha", EmpSalary = 5000 });
+            EmployeeList.Add(new Employee { EmpNo = 4, EmpName = "Preeti", EmpSalary = 6000 });
+            EmployeeList.Add(new Employee { EmpNo = 5, EmpName = "Ananya", EmpSalary = 4000 });
+
+            Console.WriteLine("Employee list");
+            foreach (Employee e in EmployeeList)
+            {
+                Console.WriteLine("Id = {0}, Name = {1}, Salary = {2}", e.EmpNo, e.EmpName, e.EmpSalary);
+            }
+
+            EmployeeList.Add(new Employee { EmpNo = 6, EmpName = "Disha", EmpSalary = 7000 });
+
+            Console.WriteLine("\nUpdated Employee list");
+            foreach (Employee e in EmployeeList)
+            {
+                Console.WriteLine("Id = {0}, Name = {1}, Salary = {2}", e.EmpNo, e.EmpName, e.EmpSalary);
+            }
+
+            Console.WriteLine("\nTotal number of Employees are {0}",EmployeeList.Count);
+
+            Console.Write("\nEnter name to be searched : ");
+            string name = Console.ReadLine();
+            Employee emp = EmployeeList.Find(x => x.EmpName == name);
+            if (emp == null)
+            {
+                Console.WriteLine(name + " does not exist in the list");
+            }
+            else
+            {
+                Console.WriteLine("Id = {0}, Name = {1}, Salary = {2}", emp.EmpNo, emp.EmpName, emp.EmpSalary);
+            }
+
+
+        }
+    }
+
+
+}

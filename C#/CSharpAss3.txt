@@ -1,0 +1,220 @@
+//C# Assignment-3
+
+using System;
+
+namespace LitwareLib
+{
+    interface IPrintable
+    {
+        void PrintDetails();
+    }
+
+    class Employee : IPrintable
+    {
+        //declaring variables as private
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+        protected double HRA, TA, DA, PF, TDS, NetSalary, GrossSalary;
+
+        //Constructor with no argument
+        public Employee()
+        {
+            this.EmpNo = -1;
+            this.EmpName = "No name provided";
+            this.Salary = -1;
+        }
+
+        //Parameterized constructor
+        public Employee(int empNo, string empName, double salary)
+        {
+            this.EmpNo = empNo;
+            this.EmpName = empName;
+            this.Salary = salary;
+        }
+
+        public virtual void CalculateSalary()
+        {
+
+            if (Salary < 5000)
+            {
+                HRA = Salary * 0.1;
+                TA = Salary * 0.05;
+                DA = Salary * 0.15;
+            }
+            else if (Salary < 10000)
+            {
+                HRA = Salary * 0.15;
+                TA = Salary * 0.1;
+                DA = Salary * 0.2;
+            }
+            else if (Salary < 15000)
+            {
+                HRA = Salary * 0.2;
+                TA = Salary * 0.15;
+                DA = Salary * 0.25;
+            }
+            else if (Salary < 20000)
+            {
+                HRA = Salary * 0.25;
+                TA = Salary * 0.2;
+                DA = Salary * 0.3;
+            }
+            else
+            {
+                HRA = Salary * 0.3;
+                TA = Salary * 0.25;
+                DA = Salary * 0.35;
+            }
+            GrossSalary = Salary + HRA + TA + DA;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+
+        public void PrintDetails()
+        {
+            Console.WriteLine("Details of employee are employee Id = {0}, Emp name = {1}, Emp Salary = {2}, Gross Salary = {3}, Net Salary = {4} ", EmpNo, EmpName, Salary, GrossSalary, NetSalary);
+        }
+    }
+
+    class Manager : Employee
+    {
+        double PetrolAllowance;
+        double FoodAllowance;
+        double OtherAllowance;
+
+        public Manager(int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            PetrolAllowance = Salary * 0.08;
+            FoodAllowance = Salary * 0.13;
+            OtherAllowance = Salary * 0.03;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += PetrolAllowance + FoodAllowance + OtherAllowance;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+    }
+
+    class MarketingExecutive : Employee
+    {
+        double KilometerTravel, TourAllowances, TelephoneAllowances;
+
+        public MarketingExecutive(double km, int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            KilometerTravel = km;
+            TourAllowances = KilometerTravel * 5;
+            TelephoneAllowances = 1000;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += TourAllowances + TelephoneAllowances;
+            NetSalary = GrossSalary - (PF + TDS); ;
+        }
+
+    }
+
+    internal class Program
+    {
+        public static void Main()
+        {
+            bool isContinue = true;
+            do
+            {
+                Console.Write("Please provide employee type, Press -> 1.Employee   2.Manager  3.Marketing Executive : ");
+                int empType = int.Parse(Console.ReadLine());
+                Console.Write("How many people do you want to add ? ");
+                int Number = int.Parse(Console.ReadLine());
+                Console.WriteLine("");
+
+                switch (empType)
+                {
+                    case 1:
+                        Employee[] emp = new Employee[Number];
+
+                        for (int i = 0; i < Number; i++)
+                        {
+                            Console.Write("Enter new employee number : ");
+                            int EmpNum = int.Parse(Console.ReadLine());
+                            Console.Write("Enter employee name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter employee salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+
+                            emp[i] = new Employee(EmpNum, EmpNames, EmpSal);
+                            emp[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        Console.WriteLine("");
+                        for (int i = 0; i < Number; i++)
+                        {
+                            emp[i].PrintDetails();
+                        }
+                        break;
+                    case 2:
+                        Manager[] mg = new Manager[Number];
+
+                        for (int i = 0; i < Number; i++)
+                        {
+                            Console.Write("Enter new employee number : ");
+                            int EmpNum = int.Parse(Console.ReadLine());
+                            Console.Write("Enter employee name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter employee salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+
+                            mg[i] = new Manager(EmpNum, EmpNames, EmpSal);
+                            mg[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        for (int i = 0; i < Number; i++)
+                        {
+                            mg[i].PrintDetails();
+                        }
+                        break;
+
+                    case 3:
+                        MarketingExecutive[] me = new MarketingExecutive[Number];
+
+                        for (int i = 0; i < Number; i++)
+                        {
+                            Console.Write("Enter new employee number : ");
+                            int EmpNum = int.Parse(Console.ReadLine());
+                            Console.Write("Enter employee name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter employee salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+                            Console.Write("Enter number of kilometers : ");
+                            int km = int.Parse(Console.ReadLine());
+                            Console.WriteLine("");
+
+                            me[i] = new MarketingExecutive(km, EmpNum, EmpNames, EmpSal);
+                            me[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        for (int i = 0; i < Number; i++)
+                        {
+                            me[i].PrintDetails();
+                        }
+                        break;
+                }
+                Console.WriteLine("Do you wish to continue, YesNo : ");
+                string str = Console.ReadLine().ToUpper();
+
+                isContinue = ((str == "YES") ? true : false);
+
+            } while (isContinue != false);
+
+
+
+
+        }
+    }
+}

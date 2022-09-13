@@ -1,0 +1,31 @@
+//C# Assignment-5 Question-4
+
+namespace CustomStack
+{
+    internal class MyStack
+    {
+        static void Main()
+        {
+            Stack<int> stack = new Stack<int>();
+            stack.Push(1);
+            stack.Push(2);
+            stack.Push(3);
+            stack.Push(4);
+            stack.Push(5);
+
+            Console.WriteLine("Added 5 elements in stack");
+            foreach (int i in stack)
+            {
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine("Removed last element from stack");
+            stack.Pop();
+            foreach (int i in stack)
+            {
+                Console.WriteLine(i);
+            }
+
+        }
+    }
+}

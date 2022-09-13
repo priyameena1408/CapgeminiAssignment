@@ -1,0 +1,24 @@
+//C# Assignment 1  Question-5
+
+using System;
+
+class Circle
+{
+    public static void Main()
+    {
+        double area, circumference;
+        Console.Write("Enter radius of circle : ");
+        double radius = Double.Parse(Console.ReadLine());
+
+        CalculateAreaParameter(radius, out area, out circumference);
+        Console.WriteLine("Area of circle having radius {0} is {1}", radius, Math.Round(area * 1000) / 1000.0);
+        Console.WriteLine("Circumference of circle having radius {0} is {1}", radius, Math.Round(circumference * 1000) / 1000.0);
+    }
+
+    public static void CalculateAreaParameter(double r, out double area, out double circumference)
+    {
+        double PI = 3.14f;
+        area = PI * r * r;
+        circumference = 2 * PI * r;
+    }
+}

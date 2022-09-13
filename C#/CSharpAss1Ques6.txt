@@ -1,0 +1,56 @@
+using System;
+
+namespace Books
+{
+    public enum BookType
+    {
+        Magazine,
+        Novel,
+        ReferenceBook,
+        Miscellaneous
+    }
+
+    struct Book
+    {
+        public int BookId { get; set; }
+        public string Title { get; set; }
+        public int Price { get; set; }
+        public BookType bookType { get; set; }
+
+        public Book(int id, string title, int price, BookType bt)
+        {
+            BookId = id;
+            Title = title;
+            Price = price;
+            bookType = bt;
+        }
+
+        public void DisplayDetails()
+        {
+            Console.WriteLine("BookId = {0}\n Title = {1}\n Price of book = {2}\n BookType = {3}", BookId, Title, Price, bookType.ToString());
+        }
+    }
+    class Program
+    {
+        public static void Main()
+        {
+            Console.Write("Enter book Id : ");
+            int id = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter book title : ");
+            string tl = Console.ReadLine();
+
+            Console.Write("Enter price of book : ");
+            int pp = int.Parse(Console.ReadLine());
+
+            Console.Write("Enter book type : ");
+            string str = Console.ReadLine();
+
+            BookType bt = (BookType)Enum.Parse(typeof(BookType), str);
+
+
+            Book b = new Book(id, tl, pp, bt);
+            b.DisplayDetails();
+        }
+    }
+}

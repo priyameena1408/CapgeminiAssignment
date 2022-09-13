@@ -1,0 +1,25 @@
+//C# Assignment-1 Question-4
+
+using System;
+
+class IntergerSwap
+{
+    public static void Main(String[] args)
+    {
+        int a, b;
+        Console.WriteLine("Enter first number");
+        a = int.Parse(Console.ReadLine());
+        Console.WriteLine("Enter second number");
+        b = int.Parse(Console.ReadLine());
+
+        Swap(ref a, ref b);
+        Console.WriteLine("Numbers after swapping are {0} are {1} ", a, b);
+    }
+
+    public static void Swap(ref int a, ref int b)
+    {
+        a = a * b;
+        b = a / b;
+        a = a / b;
+    }
+}

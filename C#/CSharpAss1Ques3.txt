@@ -1,0 +1,32 @@
+//C# Assignment-1 Question-3
+
+using System;
+
+class Program
+{
+    public static void Main(string[] args)
+    {   
+        Console.Write("Sum of how many numbers do you want to calculate ?");
+        int n = int.Parse(Console.ReadLine());
+
+        int[] numbers = new int[n];
+
+        for(int i=0; i<n; i++)
+        {
+            Console.Write("Enter number {0} : ",i+1);
+            int val = int.Parse(Console.ReadLine());
+            numbers[i] = val ;
+        }
+        Sum(numbers);
+    }
+
+    public static void Sum(params int[] numbers)
+    {
+        int sum = 0;
+        for(int i=0; i<numbers.Length; i++)
+        {
+            sum += numbers[i];
+        }
+        Console.WriteLine("Total sum is {0}", sum);
+    } 
+}

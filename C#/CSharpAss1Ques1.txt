@@ -1,0 +1,57 @@
+//C# Assignment-1 Question-1
+
+class Calculator
+{
+    public static void Main(String[] args)
+    {
+        string isContinue = string.Empty;
+
+        do
+        {
+            float num1 = 0, num2 = 0, result = 0;
+            string symbol = string.Empty;
+
+            Console.WriteLine("Enter first number");
+            num1 = float.Parse(Console.ReadLine());
+            Console.WriteLine("Enter second number");
+            num2 = float.Parse(Console.ReadLine());
+
+            Console.WriteLine("Enter the action to be perform from : +, -, *, /");
+            symbol = Console.ReadLine();
+
+            switch (symbol)
+            {
+                case "+":
+                    result = num1 + num2;
+                    Console.WriteLine("Addition of {0} and {1} is {2}", num1, num2, result);
+                    break;
+                case "-":
+                    result = num1 - num2;
+                    Console.WriteLine("Subtraction of {0} and {1} is {2}", num1, num2, result);
+                    break;
+                case "*":
+                    result = num1 * num2;
+                    Console.WriteLine("Multiplication of {0} and {1} is {2}", num1, num2, result);
+                    break;
+                case "/":
+                    result = num1 / num2;
+                    Console.WriteLine("Division of {0} and {1} is {2}", num1, num2, result);
+                    break;
+                default:
+                    Console.WriteLine("Invalid operator! Please enter a valid arithmetic operator from (+, -, *, /) ");
+                    break;
+            }
+            do
+            {
+                Console.WriteLine("Do you want to continue : Yes/No ?");
+                isContinue = Console.ReadLine();
+                if (isContinue.ToUpper() != "YES" && isContinue.ToUpper() != "NO")
+                {
+                    Console.WriteLine("Please enter a valid choice : Yes/No");
+                }
+            } while (isContinue.ToUpper() != "YES" && isContinue.ToUpper() != "NO");
+
+        } while (isContinue.ToUpper() == "YES");
+
+    }
+}

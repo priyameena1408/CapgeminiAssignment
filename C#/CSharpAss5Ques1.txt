@@ -1,0 +1,76 @@
+//Assignment5 Question - 1
+
+using System;
+using static System.Array;
+using System.Collections.Generic;
+
+namespace Assignment5
+{
+    internal class Program
+    {
+        public static void Main()
+        {
+            Console.Write("Enter number of elements to be added in integer array : ");
+            int n = int.Parse(Console.ReadLine());
+            int[] arrInt = new int[n];
+
+            Console.WriteLine("Integer array before sorting operaton");
+            for (int i = 0; i < n; i++)
+            {
+                Console.Write("Enter element {0} in integer array : ", i);
+                int element = int.Parse(Console.ReadLine());
+                arrInt[i] = element;
+            }
+
+            string[] arrStr = new string[20];
+
+            //Copying intArr into strArr
+            Console.WriteLine("Copied integer array into string array");
+            arrStr = Array.ConvertAll(arrInt, new Converter<int, string>(IntToString));
+            foreach (string str in arrStr)
+            {
+                Console.WriteLine(str);
+            }
+
+            //Sorted integer arraay
+            Console.WriteLine("Integer array after sorting operation");
+            Array.Sort(arrInt);
+            foreach (int i in arrInt)
+            {
+                Console.WriteLine(i);
+            }
+
+            Console.WriteLine("Sorted string array");
+            Array.Sort(arrStr);
+            foreach (string str in arrStr)
+            {
+                Console.WriteLine(str);
+            }
+
+            //To reverse integer array
+            Array.Clear(arrInt);
+            Console.WriteLine("Integer array after clearing all elements ");
+            foreach (int i in arrInt)
+            {
+                Console.WriteLine(i);
+            }
+
+            //To reverse string array
+            Array.Reverse(arrStr);
+            Console.WriteLine("Reversed string array");
+            foreach (string str in arrStr)
+            {
+                Console.WriteLine(str);
+            }
+
+        }
+
+        //Method to convert integer value to string value
+        public static string IntToString(int val)
+        {
+            return val.ToString();
+        }
+
+    }
+}
+

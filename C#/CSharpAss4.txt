@@ -1,0 +1,160 @@
+// Assignment4
+
+using System;
+
+interface ICloneable
+{
+    MyStack Clone();
+}
+
+public class StackException : Exception
+{
+    public StackException(string Message) : base(Message) { }
+
+}
+
+class MyStack : ICloneable
+{
+    int size;
+    int[] arr;
+    int top;
+
+    public MyStack(int Size)
+    {
+        size = Size;
+        arr = new int[Size];
+        top = -1;
+    }
+
+    public MyStack Clone()
+    {
+        MyStack ms = new MyStack(this.size);
+        foreach (int num in this.arr)
+        {
+            ms.Push(num);
+        }
+        return ms;
+        //return new MyStack(this.arr[size]);
+    }
+
+    public void Push(int val)
+    {
+        if (top != size - 1)
+        {
+            top++;
+            arr[top] = val;
+        }
+        else
+        {
+            throw new StackException("Stack Vverflow\n");
+        }
+
+    }
+
+    public void Pop()
+    {
+        int item;
+        if (top == -1)
+        {
+            throw new StackException("Stack Underflow\n");
+        }
+        else
+        {
+            item = arr[top];
+            top--;
+        }
+    }
+
+    public void ValueChange(int index, int val)
+    {
+        arr[index] = val;
+    }
+
+    public void Print()
+    {
+        for(int i=0; i<size; i++)
+        {
+            Console.Write(arr[i] + " ");
+        }
+    }
+}
+
+internal class Program
+{
+    public static void Main()
+    {
+        bool isContinue = true;
+        Console.Write("Enter size of stack : ");
+        int sz = int.Parse(Console.ReadLine());
+        MyStack stack = new MyStack(sz);
+        do
+        {
+            Console.Write("Press 1.Push  2.Pop : ");
+            int operation = int.Parse(Console.ReadLine());
+            switch (operation)
+            {
+                case 1:
+                    Console.Write("Enter number to push : ");
+                    int pushElement = int.Parse(Console.ReadLine());
+                    try
+                    {
+                        stack.Push(pushElement);
+                    }
+                    catch (StackException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    break;
+
+                case 2:
+                    try
+                    {
+                        stack.Pop();
+                    }
+                    catch (StackException e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    break;
+            }
+                    
+            Console.Write("Do you wish to continue, YesNo : ");
+            string str = Console.ReadLine().ToUpper();
+
+            isContinue = ((str == "YES") ? true : false);
+
+        } while (isContinue != false);
+
+        MyStack ms1 = new MyStack(3);
+        Console.Write("Enter size of stack to be cloned : ");
+        int n = int.Parse(Console.ReadLine());
+        for(int i=0; i<n; i++)
+        {
+            Console.Write("Enter {0} values in stack to be cloned : ", i+1);
+            int val = int.Parse(Console.ReadLine());
+            ms1.Push(val);
+        }
+
+        ms1.Print();
+        Console.WriteLine("");
+
+        MyStack ms2 = ms1.Clone();
+        ms2.Print();
+
+        Console.WriteLine("\n");
+
+        Console.Write("Please provide index number to edit value in stack array : ");
+        int ix = int.Parse(Console.ReadLine());
+        Console.Write("Please provide updated value  : ");
+        int value = int.Parse(Console.ReadLine());
+
+        ms1.ValueChange(ix, value);
+
+        ms1.Print();
+        Console.WriteLine("");
+
+        ms2.Print();
+
+    }
+}
+
