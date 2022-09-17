@@ -1,0 +1,3 @@
+Acount number of user = 101
+Name of customer = CustomerName
+ Current balance = 1000

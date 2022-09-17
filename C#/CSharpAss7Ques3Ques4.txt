@@ -1,0 +1,162 @@
+//C# Assignment-7 Question Number - 3,4
+
+using System;
+using System.Runtime.Serialization.Formatters.Binary;
+
+
+namespace LitwareLib
+{
+    interface IPrintable
+    {
+        void PrintDetails();
+    }
+
+    [Serializable]
+    class Employee : IPrintable
+    {
+        //declaring variables as private
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+        protected double HRA, TA, DA, PF, TDS, NetSalary, GrossSalary;
+
+        //Constructor with no argument
+        public Employee()
+        {
+            this.EmpNo = -1;
+            this.EmpName = "No name provided";
+            this.Salary = -1;
+        }
+
+        //Parameterized constructor
+        public Employee(int empNo, string empName, double salary)
+        {
+            this.EmpNo = empNo;
+            this.EmpName = empName;
+            this.Salary = salary;
+        }
+
+        public virtual void CalculateSalary()
+        {
+
+            if (Salary < 5000)
+            {
+                HRA = Salary * 0.1;
+                TA = Salary * 0.05;
+                DA = Salary * 0.15;
+            }
+            else if (Salary < 10000)
+            {
+                HRA = Salary * 0.15;
+                TA = Salary * 0.1;
+                DA = Salary * 0.2;
+            }
+            else if (Salary < 15000)
+            {
+                HRA = Salary * 0.2;
+                TA = Salary * 0.15;
+                DA = Salary * 0.25;
+            }
+            else if (Salary < 20000)
+            {
+                HRA = Salary * 0.25;
+                TA = Salary * 0.2;
+                DA = Salary * 0.3;
+            }
+            else
+            {
+                HRA = Salary * 0.3;
+                TA = Salary * 0.25;
+                DA = Salary * 0.35;
+            }
+            GrossSalary = Salary + HRA + TA + DA;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+
+        public void PrintDetails()
+        {
+            Console.WriteLine("Details of employee are employee Id = {0}, Emp name = {1}, Emp Salary = {2}, Gross Salary = {3}, Net Salary = {4} ", EmpNo, EmpName, Salary, GrossSalary, NetSalary);
+        }
+    }
+
+    [Serializable]
+    class Manager : Employee
+    {
+        double PetrolAllowance;
+        double FoodAllowance;
+        double OtherAllowance;
+
+        public Manager(int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            PetrolAllowance = Salary * 0.08;
+            FoodAllowance = Salary * 0.13;
+            OtherAllowance = Salary * 0.03;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += PetrolAllowance + FoodAllowance + OtherAllowance;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+    }
+
+    [Serializable]
+    class MarketingExecutive : Employee
+    {
+        double KilometerTravel, TourAllowances, TelephoneAllowances;
+
+        public MarketingExecutive(double km, int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            KilometerTravel = km;
+            TourAllowances = KilometerTravel * 5;
+            TelephoneAllowances = 1000;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += TourAllowances + TelephoneAllowances;
+            NetSalary = GrossSalary - (PF + TDS); ;
+        }
+
+    }
+
+    internal class Program
+    {
+        public static void Main()
+        {
+
+            Console.Write("Enter new Manager ID : ");
+            int EmpNum = int.Parse(Console.ReadLine());
+            Console.Write("Enter Manager name : ");
+            string EmpNames = Console.ReadLine();
+            Console.Write("Enter Manager salary : ");
+            double EmpSal = double.Parse(Console.ReadLine());
+            Manager manager = new Manager(EmpNum, EmpNames, EmpSal);
+
+            string path = @"F:\Capgemini Work\CapgeminiAssignment\C#\Ass7Ques4SerializableFile.txt";
+            using(FileStream file = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                //Serialization
+                BinaryFormatter bf = new BinaryFormatter();
+                bf.Serialize(file, manager);
+                Console.WriteLine("Serializable file created");
+            }
+
+            using (FileStream file = new FileStream(path, FileMode.OpenOrCreate))
+            {
+                //Deserialization
+                BinaryFormatter bf = new BinaryFormatter();
+                Manager mg = (Manager)bf.Deserialize(file);
+                mg.PrintDetails();
+            }
+
+
+        }
+    }
+}

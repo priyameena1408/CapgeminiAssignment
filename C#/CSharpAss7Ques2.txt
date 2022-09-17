@@ -1,0 +1,61 @@
+//SQL Assignment-7 Ques2
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Security.Principal;
+
+
+public class Account
+{
+    public int AccountNumber { get; set; }
+    public string CustomerName { get; set; }
+    public double Balance { get; set; }
+
+    public Account(int accNo, string custName, double bal)
+    {
+        this.AccountNumber = accNo;
+        this.CustomerName = custName;
+        this.Balance = bal;
+    }
+
+    public string printDetails()
+    {
+        string str = "Acount number of user = " + AccountNumber+"\nName of customer = " + "CustomerName" + "\n Current balance = " + Balance;
+        return str;
+    }
+}
+
+internal class Program
+{
+    static void Main()
+    {
+        Console.Write("Enter Customer number : ");
+        int num = int.Parse(Console.ReadLine());
+        Console.Write("Enter Customer name : ");
+        string name = Console.ReadLine();
+        Console.Write("Enter account balance of customer : ");
+        int bal = int.Parse(Console.ReadLine());
+
+        Account account = new Account(num, name, bal);
+
+        string path = @"F:\Capgemini Work\CapgeminiAssignment\C#\Ass7Ques2FileForStoringData.txt";
+        using (FileStream fs = new FileStream(path, FileMode.Create, FileAccess.Write))
+        {
+            using(StreamWriter writer = new StreamWriter(fs))
+            {
+                writer.Write(account.printDetails());
+            }
+        }
+
+        using (FileStream file = new FileStream(path, FileMode.Open, FileAccess.Read))
+        {
+            using (StreamReader reader = new StreamReader(file))
+            {
+                string str = reader.ReadToEnd();
+                Console.WriteLine(str);
+            }
+        }
+    }
+}
+

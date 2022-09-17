@@ -1,0 +1,230 @@
+using System;
+using System.Collections.Generic;
+
+namespace LitwareLib
+{
+    public delegate void EmployeeDelegate();
+
+    public class Employee
+    {
+        public int EmpNo { get; set; }
+        public string EmpName { get; set; }
+        public double Salary { get; set; }
+        public double HRA, TA, DA, PF, TDS, NetSalary, GrossSalary;
+
+        //Constructor with no argument
+        public Employee()
+        {
+            this.EmpNo = -1;
+            this.EmpName = "No name provided";
+            this.Salary = -1;
+        }
+
+        //Parameterized constructor
+        public Employee(int empNo, string empName, double salary)
+        {
+            this.EmpNo = empNo;
+            this.EmpName = empName;
+            this.Salary = salary;
+        }
+
+        public virtual void CalculateSalary()
+        {
+
+            if (Salary < 5000)
+            {
+                HRA = Salary * 0.1;
+                TA = Salary * 0.05;
+                DA = Salary * 0.15;
+            }
+            else if (Salary < 10000)
+            {
+                HRA = Salary * 0.15;
+                TA = Salary * 0.1;
+                DA = Salary * 0.2;
+            }
+            else if (Salary < 15000)
+            {
+                HRA = Salary * 0.2;
+                TA = Salary * 0.15;
+                DA = Salary * 0.25;
+            }
+            else if (Salary < 20000)
+            {
+                HRA = Salary * 0.25;
+                TA = Salary * 0.2;
+                DA = Salary * 0.3;
+            }
+            else
+            {
+                HRA = Salary * 0.3;
+                TA = Salary * 0.25;
+                DA = Salary * 0.35;
+            }
+            GrossSalary = Salary + HRA + TA + DA;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+
+        public void PrintDetails()
+        {
+            Console.WriteLine("Details of employee are employee Id = {0}, Emp name = {1}, Emp Salary = {2}, Gross Salary = {3}, Net Salary = {4} ", EmpNo, EmpName, Salary, GrossSalary, NetSalary);
+        }
+    }
+
+    class Manager : Employee
+    {
+        double PetrolAllowance;
+        double FoodAllowance;
+        double OtherAllowance;
+
+        public Manager(int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            PetrolAllowance = Salary * 0.08;
+            FoodAllowance = Salary * 0.13;
+            OtherAllowance = Salary * 0.03;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += PetrolAllowance + FoodAllowance + OtherAllowance;
+            PF = GrossSalary * 0.1;
+            TDS = GrossSalary * 0.18;
+            NetSalary = GrossSalary - (PF + TDS);
+        }
+
+        public void ManagerPrint()
+        {
+            Console.WriteLine("Details of employee are employee Id = {0}, Emp name = {1}, Emp Salary = {2}, Gross Salary = {3}, Net Salary = {4} ", EmpNo, EmpName, Salary, GrossSalary, NetSalary);
+        }
+            
+    }
+
+    class MarketingExecutive : Employee
+    {
+        double KilometerTravel, TourAllowances, TelephoneAllowances;
+
+        public MarketingExecutive(double km, int empNo, string empName, double salary) : base(empNo, empName, salary)
+        {
+            KilometerTravel = km;
+            TourAllowances = KilometerTravel * 5;
+            TelephoneAllowances = 1000;
+        }
+
+        public override void CalculateSalary()
+        {
+            base.CalculateSalary();
+            GrossSalary += TourAllowances + TelephoneAllowances;
+            NetSalary = GrossSalary - (PF + TDS); ;
+        }
+
+        public void MarketinExecutivePrint()
+        {
+            Console.WriteLine("Details of employee are employee Id = {0}, Emp name = {1}, Emp Salary = {2}, Gross Salary = {3}, Net Salary = {4} ", EmpNo, EmpName, Salary, GrossSalary, NetSalary);
+        }
+
+    }
+
+    internal class Program
+    {
+        public static void Main()
+        {
+            List<Employee> empList;
+            List<Manager> managerList;
+            List<MarketingExecutive> marketingExecutiveList;
+            bool isContinue = true;
+
+            do
+            {
+                Console.Write("Please provide employee type, Press -> 1.Employee   2.Manager  3.Marketing Executive : ");
+                int empType = int.Parse(Console.ReadLine());
+                Console.Write("How many people do you want to add ? ");
+                int Number = int.Parse(Console.ReadLine());
+                Console.WriteLine("");
+
+                switch (empType)
+                {
+                    case 1:
+
+                        empList = new List<Employee>(Number);
+                        for(int i=0; i<Number; i++)
+                        {
+                            Console.Write("Enter new employee number : ");
+                            int EmpNum = int.Parse(Console.ReadLine());
+                            Console.Write("Enter employee name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter employee salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+
+                            empList.Add(new Employee { EmpNo = EmpNum, EmpName = EmpNames, Salary = EmpSal });
+                            empList[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        break;
+
+                    case 2:
+                        managerList = new List<Manager>(Number);
+                        for (int i = 0; i < Number; i++)
+                        {
+                            Console.Write("Enter new manager number : ");
+                            int EmpNums = int.Parse(Console.ReadLine());
+                            Console.Write("Enter manager name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter manager salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+
+                            Manager m1 = new Manager(EmpNums, EmpNames, EmpSal);
+                            managerList.Add(m1);
+                            managerList[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        Console.WriteLine("");
+                        break;
+
+                    case 3:
+
+                        marketingExecutiveList = new List<MarketingExecutive>();
+                        for (int i = 0; i < Number; i++)
+                        {
+                            Console.Write("Enter new marketing executive number : ");
+                            int EmpNums = int.Parse(Console.ReadLine());
+                            Console.Write("Enter marketing executive name : ");
+                            string EmpNames = Console.ReadLine();
+                            Console.Write("Enter marketing executive salary : ");
+                            double EmpSal = double.Parse(Console.ReadLine());
+                            Console.Write("Enter number of kilometers : ");
+                            int km = int.Parse(Console.ReadLine());
+
+                            MarketingExecutive me1 = new MarketingExecutive(km, EmpNums, EmpNames, EmpSal);
+                            marketingExecutiveList.Add(me1);
+                            marketingExecutiveList[i].CalculateSalary();
+                            Console.WriteLine("");
+                        }
+                        Console.WriteLine("");
+                        break;
+                }
+                Console.WriteLine("Do you wish to continue, Yes/No : ");
+                string str = Console.ReadLine().ToUpper();
+
+                isContinue = ((str == "YES") ? true : false);
+
+            } while (isContinue != false);
+
+            Manager m = new Manager(1, "Rishabh", 2000);
+            m.CalculateSalary();
+
+            MarketingExecutive me = new MarketingExecutive(10, 2, "Sheetal", 3000);
+            me.CalculateSalary();
+
+            EmployeeDelegate del = new EmployeeDelegate(m.PrintDetails);
+            del += me.PrintDetails;
+
+            del();
+
+
+        }
+
+    }
+}

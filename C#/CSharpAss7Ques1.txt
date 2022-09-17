@@ -1,0 +1,135 @@
+using System;
+using System.IO;
+
+public class FileHandling
+
+{
+
+    public static void Main(string[] args)
+    {
+        Console.WriteLine("Press 1/2/3/4 to see lists by using following methods");
+        Console.WriteLine("1. DirectoryInfo method");
+        Console.WriteLine("2. Directory method");
+        Console.WriteLine("3. File method");
+        Console.WriteLine("4. FileInfo method");
+        int input = int.Parse(Console.ReadLine());
+
+        switch (input)
+        {
+            case 1:
+                DirectoryInfoMethod();
+                break;
+
+            case 2:
+                DirectoryMethod();
+                break;
+
+            case 3:
+                FileMethod();
+                break;
+
+            case 4:
+                FileInfo();
+                break;
+        }
+    }
+
+    public static void DirectoryInfoMethod()
+    {
+        string path = @"C:\My Directory";
+        DirectoryInfo dir = new DirectoryInfo(path);
+        DirectoryInfo[] dirs = dir.GetDirectories();
+        Console.WriteLine("List of subdirectories are as follows :");
+        foreach (DirectoryInfo d in dirs)
+        {
+            Console.WriteLine(d);
+        }
+
+        Console.WriteLine("");
+        Console.WriteLine("Directory name is {0} ", dir.Name);
+        Console.WriteLine("Directory creation time is {0} ", dir.CreationTime.ToLongTimeString());
+        Console.WriteLine("Directory Lastaccesstime is {0} ", dir.LastAccessTime.ToLongDateString());
+        Console.WriteLine("Directory LastWriteTime is {0} ", dir.LastWriteTime);
+        Console.WriteLine("Directory root is {0} ", dir.Root);
+    }
+
+    public static void DirectoryMethod()
+    {
+        string path = @"C:\My Directory";
+        DirectoryInfo dir = new DirectoryInfo(path);
+        DirectoryInfo[] dirs = dir.GetDirectories();
+        Console.WriteLine("List of subdirectories are as follows :");
+        foreach (DirectoryInfo d in dirs)
+        {
+            Console.WriteLine(d);
+        }
+
+        DateTime dt = File.GetCreationTime(path);
+        Console.WriteLine("File created time: {0}", dt.ToString());
+        DateTime dt1 = File.GetLastAccessTime(path);
+        Console.WriteLine("File last access time: {0}", dt1.ToString());
+    }
+
+    public static void FileMethod()
+    {
+        string path = @"F:\Capgemini Work\CapgeminiAssignment\C#";
+        string[] files = Directory.GetFiles(path);
+        Console.WriteLine("List of files are as follows :");
+        foreach (string strn in files)
+        {
+            Console.WriteLine(strn);
+        }
+
+        Console.WriteLine("");
+        Console.Write("Enter fileName to see its properties : ");
+        string str = Console.ReadLine();
+        string file = path + "\\" + str;
+
+        FileInfo fi = new FileInfo(file);
+        if (fi.Exists)
+        {
+            Console.WriteLine("File creation time is {0} ", fi.CreationTime.ToLongTimeString());
+            Console.WriteLine("File Lastaccesstime is {0} ", fi.LastAccessTime.ToLongDateString());
+            Console.WriteLine("File length is {0} ", fi.Length.ToString() + " Bytes");
+            Console.WriteLine("File extension is {0} ", fi.Extension);
+            Console.WriteLine("File LastWriteTime is {0} ", fi.LastWriteTime);
+        }
+        else
+        {
+            Console.WriteLine(file);
+            Console.WriteLine("File does not exist");
+        }
+
+    }
+
+    public static void FileInfo()
+    {
+        string path = @"F:\Capgemini Work\CapgeminiAssignment\C#";
+        DirectoryInfo finfo = new DirectoryInfo(path);
+        FileInfo[] FileInformation = finfo.GetFiles();
+        foreach(FileInfo f in FileInformation)
+        {
+            Console.WriteLine(f);
+        }
+        Console.WriteLine("");
+        Console.Write("Enter fileName to see its properties : ");
+        string str = Console.ReadLine();
+        string file = path + "\\" +str;
+
+        FileInfo fi = new FileInfo(file);
+        if (fi.Exists)
+        {
+            Console.WriteLine("File creation time is {0} ", fi.CreationTime.ToLongTimeString());
+            Console.WriteLine("File Lastaccesstime is {0} ", fi.LastAccessTime.ToLongDateString());
+            Console.WriteLine("File length is {0} ", fi.Length.ToString() + " Bytes");
+            Console.WriteLine("File extension is {0} ", fi.Extension);
+            Console.WriteLine("File LastWriteTime is {0} ", fi.LastWriteTime);
+        }
+        else
+        {
+            Console.WriteLine(file);
+            Console.WriteLine("File does not exist");
+        }
+    }
+}
+

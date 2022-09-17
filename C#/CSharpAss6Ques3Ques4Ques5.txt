@@ -1,0 +1,119 @@
+using System;
+using System.Collections.Generic;
+
+public class UserArgs : EventArgs
+{
+    public double Balance { get; set; }
+    public double Amount { get; set; }
+}
+
+public class Account
+{
+    public event EventHandler<UserArgs> UnderBalance;
+    public event EventHandler<UserArgs> BalanceZero;
+
+    public int AccountNumber {get; set;}
+    public string CustomerName {get; set;}
+    public double Balance {get; set;}
+
+    public Account( int accNo, string custName, double bal)
+    {
+        this.AccountNumber = accNo;
+        this.CustomerName = custName;
+        this.Balance = bal;
+    }
+
+    public void Withdraw(double amount)
+    {
+        UserArgs arg = new UserArgs();
+        arg.Balance = this.Balance;
+        arg.Amount = amount;
+
+        if (amount < Balance)
+        {
+            Balance -= amount;
+            Console.WriteLine("Available amount = {0}", Balance);
+        }
+        else if(Balance == 0)
+        {
+            OnBalanceZero(arg);
+        }
+        else
+        {
+            OnUnderBalance(arg);
+        }
+    }
+
+    public void Deposit(double amount)
+    {
+        this.Balance += amount;
+        Console.WriteLine("Available amount = {0}", Balance);
+    }
+
+    private void OnUnderBalance(UserArgs args)
+    {
+        UnderBalance.Invoke(null,args); 
+    }
+
+    private void OnBalanceZero(UserArgs args)
+    {
+        BalanceZero(null, args); 
+    }
+}
+
+public class ICICIBank
+{
+    public static void showIciciBalance(object sender, UserArgs e){
+        Console.WriteLine("Transaction cannot be continued as balance is insufficient/zero in Account");
+    }
+}
+
+public class HDFCBank
+{
+    public static void showHdfcBalance(object sender, UserArgs e)
+    {
+        if(e.Balance < 1000)
+        {
+            Console.WriteLine("Transaction cannot be continued below specified limit of\tRs.-1000");
+        }
+    }
+}
+
+internal class Program
+{
+    static void Main()
+    {
+        Console.Write("Enter Customer number : ");
+        int num = int.Parse(Console.ReadLine());
+        Console.Write("Enter Customer name : ");
+        string name = Console.ReadLine();
+        Console.Write("Enter account balance of customer : ");
+        int bal = int.Parse(Console.ReadLine());
+
+        Account account = new Account(num, name, bal);
+        account.UnderBalance += ICICIBank.showIciciBalance;
+        account.UnderBalance += HDFCBank.showHdfcBalance;
+
+        account.BalanceZero += ICICIBank.showIciciBalance;
+        account.BalanceZero += HDFCBank.showHdfcBalance;
+
+
+        Console.Write("Enter operation type 1.Add balance   2.Withdraw balance : ");
+        int type = int.Parse(Console.ReadLine());
+
+        switch (type)
+        {
+            case 1:
+                Console.Write("Enter amount to be added : ");
+                int addAmount = int.Parse(Console.ReadLine());
+                account.Deposit(addAmount);
+                break;
+
+            case 2:
+                Console.Write("Enter amount to be withdraw : ");
+                int withdrawAmount = int.Parse(Console.ReadLine());
+                account.Withdraw(withdrawAmount);
+                break;
+        }
+    }
+}
